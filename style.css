@@ -158,7 +158,7 @@ blockquote{
 }
 
 #left {
-	width: 350px;
+	width: 450px;
 	float:left;
 	display: block;
         margin-left: 20px;
@@ -170,14 +170,14 @@ blockquote{
 
 
 #right {
-	width: 315px;
+	width: 415px;
 	float: right;
 	display:block;
 	margin-top: 10px;
 }
 
 #right .box {
-	width: 280px;
+	width: 380px;
 	background: #F6F9FB;
 	border: 1px solid #E1E1E1;
 	padding:10px 10px 15px 10px;
