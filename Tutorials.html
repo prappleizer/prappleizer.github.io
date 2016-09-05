@@ -29,6 +29,7 @@
         <ul>
           <li>Numpy, matplotlib, pyfits (or astropy.io.fits)</li>
           <li><a href="SDSS_DR7.tar">The SDSS DR7 Catalog</a></li>
+          <li>Unguided Tutorial (see below)</li>
           <li><a href="sdss_tutorial.ipynb">Guided .ipynb tutorial (requires jupyter)</a></li>
           <li><a href="sdss_tutorial.html"> Guided tutorial (html)</a> - same as above but a static webpage to follow along to /copy paste from.</li>
           <li><a href="sdss_tutorial_solns.html">Tutorial Solutions (html)</a></li>
@@ -36,7 +37,13 @@
       </p>
       <p>SDSS (Sloan Digital Sky Survey) is a large sample of nearby galaxies, and in addition to being a valuable tool for a variety of scientific goals (the survey has produced over 5,800 scientific papers, which in turn have been cited a staggering 245,000 times), it also provides a useful practice set on which to exercise our python chops.</p>
       <p><b>Problem Statement</b></p>
-      <p>We want to first learn how to read in the fits files (data tables) storing the SDSS catalogs for 3 key measurements: Mass, Star Formation Rate (SFR), and metallicity. Once we have successfully accessed the data, we can start to look at one of the fundamental relations in galactic astronomy- Mass/Metalicity. 
+      <p>We want to first learn how to read in the fits files (data tables) storing the SDSS catalogs for 3 key measurements: Mass, Star Formation Rate (SFR), and metallicity. Once we have successfully accessed the data, we can start to look at one of the fundamental relations in galactic astronomy- Mass/Metalicity. Instructions: 
+        <ul>
+          <li>Load the three catalog fits files into python and access the rec.array tables.</li>
+          <li> Filter the data to only include those for which entries could be properly measured, using the "AVG" column. For mass, take only those with values not equal to -1, for SFR take those with values >-99, and for metallicity take those with values >-99.9.</li>
+          <li>Make plots for mass vs metallicity, one of the fundamental correlations in extragalactic astronomy. Use a 2d Histogram with 300 bins (the LogNorm() function in matplotlib will be useful for colorbar purposes). </li>
+          <li>Make the same plot for Metallicity as a function of SFR and SFR as a function of mass.</li>
+          <li> You should notice all three exhibit positive trends. In order to determine which trends are legitimate and which are just representing the other trends, create three sets of plots in which you take slices (say, ten bins of equal width across the sample) of mass, metallicity, and sfr, and compare the other two properties. For one of them, the relation will dissapear. What is your conclusion then about which relations are real and which are derivatives? If you get stuck anywhere along the way, glance at the guided tutorial for a more in-depth discussion of both the physics and programming. The guided tutorial also displays some of the results you are looking for without giving away the method of producing them programmatically.</li>
     </div>
     <div id="right">
       <div class="box">
