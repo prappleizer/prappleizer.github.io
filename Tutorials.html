@@ -21,7 +21,7 @@
   <div id="content">
     <div id="left">
       <h1>Tutorials</h1>
-      <p>Here you will find a variety of tutorials to help you practice your Python. The tutorials are listed roughly in order of increasing difficulty, or, at the very least less hand holding is involved in the later tutorials. If you already have a good basic understanding of Python as a language, the tutorial on SDSS analysis might be a useful one for you to jump into.</p>
+      <p>Here you will find a variety of tutorials to help you practice your Python. The tutorials are listed in the order I make them, so take a peak at the difficulty level to get an idea of what each entails. If you already have a good basic understanding of Python as a language, the tutorial on SDSS analysis might be a useful one for you to jump into.</p>
       <hr>
       <h2>Tutorial: Basic Data I/O and binned plotting with SDSS</h2>
       <p><b>Difficulty Level: Intermediate</b></p>
@@ -43,8 +43,35 @@
           <li> Filter the data to only include those for which entries could be properly measured, using the "AVG" column. For mass, take only those with values not equal to -1, for SFR take those with values >-99, and for metallicity take those with values >-99.9.</li>
           <li>Make plots for mass vs metallicity, one of the fundamental correlations in extragalactic astronomy. Use a 2d Histogram with 300 bins (the LogNorm() function in matplotlib will be useful for colorbar purposes). </li>
           <li>Make the same plot for Metallicity as a function of SFR and SFR as a function of mass.</li>
-          <li> You should notice all three exhibit positive trends. In order to determine which trends are legitimate and which are just representing the other trends, create three sets of plots in which you take slices (say, ten bins of equal width across the sample) of mass, metallicity, and sfr, and compare the other two properties. For one of them, the relation will dissapear. What is your conclusion then about which relations are real and which are derivatives? If you get stuck anywhere along the way, glance at the guided tutorial for a more in-depth discussion of both the physics and programming. The guided tutorial also displays some of the results you are looking for without giving away the method of producing them programmatically.</li>
+          <li> You should notice all three exhibit positive trends. In order to determine which trends are legitimate and which are just representing the other trends, create three sets of plots in which you take slices (say, ten bins of equal width across the sample) of mass, metallicity, and sfr, and compare the other two properties. For one of them, the relation will dissapear. What is your conclusion then about which relations are real and which are derivatives? </li>
+      </ul>
+As always, the unguided tutorial is meant to be a challenge, deliberately left sparse as a problem set might be. You can always check in with the guided tutorial for hints and examples of what you are looking to get (and of course the solutions).</p>
+          <hr>
+          <h2>Tutorial: Loop/Conditional Practice with Centroiding Spectra</h2>
+              <p><b>Difficulty Level: Beginner</b></p>
+              <p><b>Downloads / Dependencies:</b>
+                <ul>
+                  <li><a href='neon.txt'>Neon Spectrum text file</a></li>
+                  <li> Unguided tutorial (see below)</li>
+                  <li><a href='centroiding_tutorial.ipynb'>Guided tutorial (.ipynb)</a></li>
+                  <li><a href='centroiding_tutorial.html'>Guided tutorial (html)</a> - Same as above, but static webpage to copy paste from.</li>
+                  <li><a href='centroiding_solns.html'>Solutions</a></li>
+                  </ul>
+            </p>
+            <p><b>Unguided Tutorial</b></p>
+            <p>
+            <ul>
+              <li>Import the neon spectrum text file and plot the spectrum.</li>
+              <li>Write a peak-finding algorithm to locate the peaks of the spectrum, specifying a threshold (up to you, maybe 20,000+).</li>
+              <li> Iterate over those peaks and calculate the center of light (same formula as center of mass) for each peak, using the FWHM (full wifth at half maximum) as the region over which you calculate the centroid.</li>
+              <li> Plot the centroids as vertical dashes over the spectrum, and then plot the residual between each centroid and peak. </li>
+            </ul>
+              As always, the unguided tutorial is meant to be a challenge, deliberately left sparse as a problem set might be. You can always check in with the guided tutorial for hints and examples of what you are looking to get (and of course the solutions).</p>
+    
+  
+
     </div>
+    
     <div id="right">
       <div class="box">
         <h2>About</h2>
@@ -62,8 +89,11 @@
         <p>Questions? Comments? Suggestions? Feel free to get in touch with me at ipasha@berkeley.edu.</p>
       </div>
     </div>
+
     <div id="clear"></div>
   </div>
+</div>
+
   <div id="footer">
     <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">Python for Astronomers: An Introduction to Scientific Computing</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://prappleizer.github.io" property="cc:attributionName" rel="cc:attributionURL">Imad Pasha & Christopher Agostino</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
     <p>Copyright 2016 Imad Pasha.</p>
