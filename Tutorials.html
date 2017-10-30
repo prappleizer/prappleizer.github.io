@@ -21,18 +21,69 @@
   <div id="content">
     <div id="left">
       <h1>Tutorials</h1>
-      <p>Here you will find a variety of tutorials to help you practice your Python. The tutorials are listed in the order I make them, so take a peak at the difficulty level to get an idea of what each entails. If you already have a good basic understanding of Python as a language, the tutorial on SDSS analysis might be a useful one for you to jump into.</p>
+      <p>Here you will find a variety of tutorials to help you practice your Python. The tutorials are listed roughly in order of difficulty. If you already have a good basic understanding of Python as a language, the tutorial on SDSS analysis might be a useful one for you to jump into.</p>
+      <hr>
+          <h2>Tutorial: Loop/Conditional Practice with Centroiding Spectra</h2>
+              <div align="left"><img src="Tutorials/Centroiding/centroiding.png" width="550"/></div>
+              <p><b>Difficulty Level: Easy</b></p>
+              <p><b>Downloads / Dependencies:</b>
+                <ul>
+                  <li><a href='Tutorials/Centroiding/neon.txt'>Neon Spectrum text file</a>(right click + save as...)</li>
+                  <li> Unguided tutorial (see below)</li>
+                  <li><a href='Tutorials/Centroiding/centroiding_tutorial.ipynb'>Guided tutorial (jupyter notebook)</a></li>
+                  <li><a href='Tutorials/Centroiding/centroiding_tutorial.html'>Guided tutorial (static html)</a></li>
+                  <li><a href='Tutorials/Centroiding/Centroiding_solns.ipynb'>Solution (jupyter notebook)</a></li>
+                  <li><a href='Tutorials/Centroiding/Centroiding_solns.html'>Solution (static html)</a></li>
+                  </ul>
+            </p>
+            <p><b>Unguided Tutorial</b></p>
+            <p>
+            <ul>
+              <li>Import the neon spectrum text file and plot the spectrum.</li>
+              <li>Write a peak-finding algorithm to locate the peaks of the spectrum, specifying a threshold (up to you, maybe 20,000+).</li>
+              <li> Iterate over those peaks and calculate the center of light (same formula as center of mass) for each peak, using the FWHM (full width at half maximum) as the region over which you calculate the centroid.</li>
+              <li> Plot the centroids as vertical dashes over the spectrum, and then plot the residual between each centroid and peak. </li>
+            </ul>
+              As always, the unguided tutorial is meant to be a challenge, deliberately left sparse as a problem set might be. You can always check in with the guided tutorial for hints and examples of what you are looking to get (and of course the solutions).</p>
+      <hr>
+          <h2>Tutorial: Linear Regession - Fitting Data</h2>
+            <div align="left"><img src="Tutorials/Linear_Regression/lin_reg.png" width='450' /></div>
+              <p><b>Difficulty Level: Easy</b></p>
+              <p><b>Downloads / Dependencies:</b>
+                <ul>
+                  <li><a href='Tutorials/Linear_Regression/data.txt'>Data File</a>(right click + save as...)</li>
+                  <li>Numpy, Matplotlib</li>
+                  <li> Unguided tutorial (see below)</li>
+                  <li><a href='Tutorials/Linear_Regression/Linear_Regression.ipynb'>Guided tutorial (jupyter notebook)</a></li>
+                  <li><a href='Tutorials/Linear_Regression/Linear_Regression.html'>Guided tutorial (static html)</a></li>
+                  <li><a href='Tutorials/Linear_Regression/Linear_Regression_Solution.ipynb'>Solution (jupyter notebook)</a></li>
+                  <li><a href='Tutorials/Linear_Regression/Linear_Regression_Solution.html'>Solution (static html)</a></li>
+                  </ul>
+            </p>
+            <p><b>Unguided Tutorial </b></p>
+            <p>
+            <ul>
+              <li>Import the Ice core data and plot temperature (column 5) as a function of age (column 3).</li>
+              <li>Write a model function that produces a model that is a composite of three Sines, with input parameters as the three amplitudes, periods, and single (added) offset value T0.</li>
+              <li> Write a Likeness function that returns a value sum((y-y_model)^2/y_unc^2)</li>
+              <li>Write a prior function that checks if a set of parameters is within reasonable values for each - return 0 if yes, and -inf if not. </li>
+              <li>Write an lnp function that takes a list of parameters, runs it through the prior checking function, and if it returns 0, calculate a likelihood and return that.</li>
+              <li>Look up the documentation for emcee on how to set up an MCMC using these functions, and fit the ice core data. Overplot some models from your posterior distribution over your data. 
+            </ul>
+              As always, the unguided tutorial is meant to be a challenge, deliberately left sparse as a problem set might be. You can always check in with the guided tutorial for hints and examples of what you are looking to get (and of course the solutions).</p>
       <hr>
       <h2>Tutorial: Basic Data I/O and binned plotting with SDSS</h2>
+      <img src="Tutorials/SDSS/sdss.png" width="450"/>
       <p><b>Difficulty Level: Intermediate</b></p>
       <p><b>Downloads / Dependencies:</b> 
         <ul>
           <li>Numpy, matplotlib, pyfits (or astropy.io.fits)</li>
-          <li><a href="SDSS_DR7.tar">The SDSS DR7 Catalog</a></li>
+          <li><a href="Tutorials/SDSS/SDSS_DR7.tar">The SDSS DR7 Catalog</a></li>
           <li>Unguided Tutorial (see below)</li>
-          <li><a href="sdss_tutorial.ipynb">Guided .ipynb tutorial (requires jupyter)</a></li>
-          <li><a href="sdss_tutorial.html"> Guided tutorial (html)</a> - same as above but a static webpage to follow along to /copy paste from.</li>
-          <li><a href="#">Tutorial Solutions (html)</a></li>
+          <li><a href="Tutorials/SDSS/sdss_tutorial.ipynb">Guided tutorial(jupyter notebook)</a></li>
+          <li><a href="Tutorials/SDSS/sdss_tutorial.html"> Guided tutorial (static html)</a></li>
+          <li><a href="Tutorials/SDSS/sdss_tutorial_solns.ipynb">Tutorial Solution (jupyter notebook)</a></li>
+          <li><a href="Tutorials/SDSS/sdss_tutorial_solns.html">Tutorial Solution (static html)</a></li>
         </ul>
       </p>
       <p>SDSS (Sloan Digital Sky Survey) is a large sample of nearby galaxies, and in addition to being a valuable tool for a variety of scientific goals (the survey has produced over 5,800 scientific papers, which in turn have been cited a staggering 245,000 times), it also provides a useful practice set on which to exercise our python chops.</p>
@@ -46,30 +97,33 @@
           <li> You should notice all three exhibit positive trends. In order to determine which trends are legitimate and which are just representing the other trends, create three sets of plots in which you take slices (say, ten bins of equal width across the sample) of mass, metallicity, and sfr, and compare the other two properties. For one of them, the relation will dissapear. What is your conclusion then about which relations are real and which are derivatives? </li>
       </ul>
 As always, the unguided tutorial is meant to be a challenge, deliberately left sparse as a problem set might be. You can always check in with the guided tutorial for hints and examples of what you are looking to get (and of course the solutions).</p>
-          <hr>
-          <h2>Tutorial: Loop/Conditional Practice with Centroiding Spectra</h2>
-              <p><b>Difficulty Level: Beginner</b></p>
+    
+         <hr>
+          <h2>Tutorial: A Beginner's Gude to Markov-Chain Monte Carlo (MCMC)</h2>
+              <img src="Tutorials/MCMC/mcmc.png" width="550" />
+              <p><b>Difficulty Level: Easy (guided), Hard (unguided)</b></p>
               <p><b>Downloads / Dependencies:</b>
                 <ul>
-                  <li><a href='neon.txt'>Neon Spectrum text file</a>(right click + save as...)</li>
+                  <li><a href='Tutorials/MCMC/ice_core_data.txt'>Ice Core Data File</a>(right click + save as...)</li>
+                  <li>Numpy, Matplotlib, emcee</li>
                   <li> Unguided tutorial (see below)</li>
-                  <li><a href='centroiding_tutorial.ipynb'>Guided tutorial (.ipynb)</a></li>
-                  <li><a href='centroiding_tutorial.html'>Guided tutorial (html)</a> - Same as above, but static webpage to copy paste from.</li>
-                  <li><a href='Centroiding_solns.html'>Solutions</a></li>
+                  <li><a href='Tutorials/MCMC/MCMC_Tutorial.ipynb'>Guided tutorial (jupyter notebook)</a></li>
+                  <li><a href='Tutorials/MCMC/MCMC_Tutorial.html'>Guided tutorial (static html)</a></li>
+                  <li><a href='Tutorials/MCMC/MCMC_Tutorial_Solution.ipynb'>Solution (jupyter notebook)</a></li>
+                  <li><a href='Tutorials/MCMC/MCMC_Tutorial_Solution.html'>Solution (static html)</a></li>
                   </ul>
             </p>
-            <p><b>Unguided Tutorial</b></p>
+            <p><b>Unguided Tutorial (Hard) </b></p>
             <p>
             <ul>
-              <li>Import the neon spectrum text file and plot the spectrum.</li>
-              <li>Write a peak-finding algorithm to locate the peaks of the spectrum, specifying a threshold (up to you, maybe 20,000+).</li>
-              <li> Iterate over those peaks and calculate the center of light (same formula as center of mass) for each peak, using the FWHM (full width at half maximum) as the region over which you calculate the centroid.</li>
-              <li> Plot the centroids as vertical dashes over the spectrum, and then plot the residual between each centroid and peak. </li>
+              <li>Import the Ice core data and plot temperature (column 5) as a function of age (column 3).</li>
+              <li>Write a model function that produces a model that is a composite of three Sines, with input parameters as the three amplitudes, periods, and single (added) offset value T0.</li>
+              <li> Write a Likeness function that returns a value sum((y-y_model)^2/y_unc^2)</li>
+              <li>Write a prior function that checks if a set of parameters is within reasonable values for each - return 0 if yes, and -inf if not. </li>
+              <li>Write an lnp function that takes a list of parameters, runs it through the prior checking function, and if it returns 0, calculate a likelihood and return that.</li>
+              <li>Look up the documentation for emcee on how to set up an MCMC using these functions, and fit the ice core data. Overplot some models from your posterior distribution over your data. 
             </ul>
               As always, the unguided tutorial is meant to be a challenge, deliberately left sparse as a problem set might be. You can always check in with the guided tutorial for hints and examples of what you are looking to get (and of course the solutions).</p>
-    
-  
-
     </div>
     
    
