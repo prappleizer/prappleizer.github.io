@@ -80,12 +80,9 @@
             <p><b>Unguided Tutorial </b></p>
             <p>
             <ul>
-              <li>Import the Ice core data and plot temperature (column 5) as a function of age (column 3).</li>
-              <li>Write a model function that produces a model that is a composite of three Sines, with input parameters as the three amplitudes, periods, and single (added) offset value T0.</li>
-              <li> Write a Likeness function that returns a value sum((y-y_model)^2/y_unc^2)</li>
-              <li>Write a prior function that checks if a set of parameters is within reasonable values for each - return 0 if yes, and -inf if not. </li>
-              <li>Write an lnp function that takes a list of parameters, runs it through the prior checking function, and if it returns 0, calculate a likelihood and return that.</li>
-              <li>Look up the documentation for emcee on how to set up an MCMC using these functions, and fit the ice core data. Overplot some models from your posterior distribution over your data. 
+              <li>Import the data file and plot y vs x.</li>
+              <li>Perform a Linear Least Squares (LLS) fit to the data, using linear and quadratic fits, using python arrays as matrices. 
+              <li>Plot the results.</li>
             </ul>
               As always, the unguided tutorial is meant to be a challenge, deliberately left sparse as a problem set might be. You can always check in with the guided tutorial for hints and examples of what you are looking to get (and of course the solutions).</p>
       <hr>
