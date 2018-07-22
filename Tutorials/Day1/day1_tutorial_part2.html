@@ -11784,7 +11784,7 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Welcome to Part II of the bootcamp! Now that we've covered the basics, we can start diving into what makes programming useful and powerful. To begin, let's quickly review what we learned in Part I of this tutorial. <em>Note: You'll need to run all code cells of this tutorial in order.</em></p>
-<h3 id="Variable-Declarations">Variable Declarations<a class="anchor-link" href="#Variable-Declarations">&#182;</a></h3><p>We learne that to store information (of any kind) in Python, we want to set a variable name equal to that information, and then use that name to perform calculations on it</p>
+<h3 id="Variable-Declarations">Variable Declarations<a class="anchor-link" href="#Variable-Declarations">&#182;</a></h3><p>We learned that to store information (of any kind) in Python, we want to set a variable name equal to that information, and then use that name to perform calculations on it</p>
 <h3 id="Data-Types">Data Types<a class="anchor-link" href="#Data-Types">&#182;</a></h3><p>We learned that Python has different rules for different kinds of data — it performs calculations differently on integers than on floats, treats lists differently than numpy arrays, etc. Figuring out what data type is the most efficient and effective way to work with your data is one of the key conceptual skills to learn when programming.</p>
 <h3 id="Lists-and-Indexing">Lists and Indexing<a class="anchor-link" href="#Lists-and-Indexing">&#182;</a></h3><p>We learned that the "default" way to store simple data (say, a bunch of numbers) is in a <strong>list</strong>, which can then be <strong>indexed</strong> by element number (starting with zero) to extract values from the list. We learned that lists can be fed into certain functions, like sum(), to return the sum of all numbers in the list (assuming the list is, indeed, all numbers).</p>
 <h3 id="Debugging-(barely)">Debugging (barely)<a class="anchor-link" href="#Debugging-(barely)">&#182;</a></h3><p>You probably didn't notice, but we practiced a little bit of debugging as well — we printed out lists to make sure they were filled with the numbers we wanted after a calculation, a simple form of debugging!</p>
@@ -11799,7 +11799,7 @@ div#notebook {
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Numpy,-Scipy,-Matplotlib,-and-Beyond">Numpy, Scipy, Matplotlib, and Beyond<a class="anchor-link" href="#Numpy,-Scipy,-Matplotlib,-and-Beyond">&#182;</a></h3><p>In Part I of this tutorial, we had to resort to calling a special data type that was not native to Python — the Numpy Array. This was useful to us because of a special behavior: Operating math on an array performs the operation on each value in the array, useful for say, subtracting the mean from every value and then squaring every value.</p>
 <p>But what <em>is</em> Numpy, actually?</p>
-<p>Believe it or not, from a mathematical perspective, what you saw in Part I was just about the limit of Python's native math functionality. You can add, subtract, multiply, exponentiate, and take modulos. To do anything more complicated — like, say, caclulate a sine or cosine, we need to actually <strong>import</strong> libraries of functions which can accomplish these tasks.</p>
+<p>Believe it or not, from a mathematical perspective, what you saw in Part I was just about the limit of Python's native math functionality. You can add, subtract, multiply, exponentiate, and take modulos. To do anything more complicated — like, say, calculate a sine or cosine, we need to actually <strong>import</strong> libraries of functions which can accomplish these tasks.</p>
 <h4 id="What's-a-function?">What's a function?<a class="anchor-link" href="#What's-a-function?">&#182;</a></h4><p>It's useful to take a second to make sure we're on the same page about functions. A function is something that takes one or more inputs, and spits something out. When, in math class, you write y = sin(x), "sin" is the function you are using. The "x" you are plugging in is the <em>argument</em> of that function, and you are storing its <em>output</em> in the variable "y". If I use the range() function, to create a list from 1 to 10,</p>
 
 </div>
@@ -11953,7 +11953,7 @@ div#notebook {
 <p>This is what we are going to learn to do now.</p>
 <h3 id="Loadtxt()-and-Genfromtxt()">Loadtxt() and Genfromtxt()<a class="anchor-link" href="#Loadtxt()-and-Genfromtxt()">&#182;</a></h3><p>Astronomical data are stored in a huge variety of file formats and organizational schemes. Let's start with the most simple and build up. In Ye Olde Days, basically all data were kept in plaintext ASCII files — in short, text. Things have changed recently, though often times data tables are still the most efficient means of storage, they are now wrapped inside file formats like FITS and HDF5 to make them more portable and stable over time. At the end of the day, we are most interested in getting past those layers of protocols to the raw numbers underneath, which we want sitting around in arrays we can mess with.</p>
 <p>Let's start with that most simple of cases: The ASCII text file. 
-From the dependencies, you should have downloaded the "quantum_mechanics.grades" file from the website. <em>Note:</em> Often, when working with ascii, programmers will set up their programs to output text files with extensions that indivate what they are (like data.spec and data.phot), rather than .txt — but rest assured, they are all text files and can be viewed in a text viewer like Sublime.</p>
+From the dependencies, you should have downloaded the "quantum_mechanics.grades" file from the website. <em>Note:</em> Often, when working with ascii, programmers will set up their programs to output text files with extensions that indicate what they are (like data.spec and data.phot), rather than .txt — but rest assured, they are all text files and can be viewed in a text viewer like Sublime.</p>
 <p>Make sure that the text file is in the same directory you are running this notebook in. Your first task: Look up the <strong>documentation</strong> for Numpy's loadtxt() function — you can do so online (google the function) or by typing help(np.loadtxt) in a cell here in this Notebook. Once you've done that, use the cell below to load the data into a variable called class_grades. We're going to continue with our dataset from Part I.</p>
 <p>The file you are loading contains 2 columns, the first is the name of the student, the second is their grade on the exam. If you just try to run np.loadtxt() on the file, you'll get an error, because it cannot turn the names into floats. Make sure to look at the "dtype" option in the documentation, and try setting it to string — this will turn all things into strings, but we can extract the numbers easily later.</p>
 
@@ -12354,7 +12354,7 @@ My age is: 9
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Does it look like it worked? Try indexting for the grade of Peter in the cell below:</p>
+<p>Does it look like it worked? Try indexing for the grade of Peter in the cell below:</p>
 
 </div>
 </div>
@@ -13625,7 +13625,7 @@ Take a look at the following:</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>There might be some nomenclature that's a bit unfamiliar to you in the way I designed my function, if you check my solutions, though you should have been able to accomplish what was needed using for loops and things we've learned so far. But to clue you in, I utilized two basica Python behaviors to accomplish my task in fewer lines: List addition, and list comprehension.</p>
+<p>There might be some nomenclature that's a bit unfamiliar to you in the way I designed my function, if you check my solutions, though you should have been able to accomplish what was needed using for loops and things we've learned so far. But to clue you in, I utilized two basic Python behaviors to accomplish my task in fewer lines: List addition, and list comprehension.</p>
 <p>List addition is simply the fact that to combine two lists into one, just add them:</p>
 
 </div>
