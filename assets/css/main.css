@@ -6,7 +6,7 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
-html { scroll-behavior: smooth; } 
+
 html, body, div, span, applet, object,
 iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
 pre, a, abbr, acronym, address, big, cite,
@@ -3215,12 +3215,12 @@ input, select, textarea {
 		@media screen and (max-width: 1680px) {
 
 			#sidebar {
-				width: 19em;
+				width: 24em;
 			}
 
 				#sidebar > .inner {
 					padding: 1.66667em 1.66667em 1.33333em 1.66667em ;
-					width: 19em;
+					width: 24em;
 				}
 
 					#sidebar > .inner > .alt {
@@ -3231,7 +3231,7 @@ input, select, textarea {
 
 				#sidebar .toggle {
 					height: 6.25em;
-					left: 19em;
+					left: 24em;
 					line-height: 6.25em;
 					text-indent: 5em;
 					width: 5em;
@@ -3242,7 +3242,7 @@ input, select, textarea {
 					}
 
 				#sidebar.inactive {
-					margin-left: -19em;
+					margin-left: -24em;
 				}
 
 		}
