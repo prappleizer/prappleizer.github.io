@@ -1,0 +1,598 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MN8CDW5');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FunctionalProgramming</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+	<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MN8CDW5"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <div class="stackedit__html">
+<h1 id="functional-programming-in-python" align='center'>Functional Programming in Python</h1>
+<div align="center"><img src="../../img/icon_face.png" width="150" /></div>
+<h3 id="div-aligncenterimad-pasha--march-2020div"><div align="center">Imad Pasha | February 2021</div></h3>
+<h3 id="div-aligncenterimad-pasha--march-2020div"><div align="center"><a href="FunctionalProgramming.pdf" target="_blank">Download this chapter as a PDF</a></div></h3>
+<p>If you’ve reached this point, you should be familiar with the basics of programming in python, in either an interpreter setting or in a .py script which you then run. Within these scripts, you can write multiple lines of code which set variables, manipulate them, and ultimately print or otherwise save values of interest.</p>
+<p>The next step forward in the abstraction of how your code will be structured is known as <em>functional programming</em>. This refers to the collection of code into specific self defined functions, with bite-sized tasks that you can verify are working properly (unit testing) and which allow for easy debugging. Later, we will discuss an object-oriented approach to Python development though the use of <code>classes</code>, but even within these later frameworks, the fundamental unit of code is still the function (though it will go by the name <code>method</code> in the OOP style).</p>
+<p>You already have plenty of experience <em>using</em> functions. When we import libraries like <code>numpy</code> or <code>matplotlib</code> we are importing <em>functions</em> and <em>classes</em> other people have written that are stored in those libraries. When I call</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+
+x <span class="token operator">=</span> np<span class="token punctuation">.</span>linspace<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token operator">*</span>np<span class="token punctuation">.</span>pi<span class="token punctuation">,</span><span class="token number">100</span><span class="token punctuation">)</span>
+my_wave <span class="token operator">=</span> np<span class="token punctuation">.</span>sin<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+</code></pre>
+<p>both <code>np.linspace()</code> and <code>np.sin()</code> are functions that someone on the <code>numpy</code> team wrote down and placed in the library. We know how to use these functions even though we didn’t write them because we read the <em>documentation</em>, i.e.,</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token builtin">help</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>zeros<span class="token punctuation">)</span>
+</code></pre>
+<pre><code>Help on built-in function zeros in module numpy:
+
+zeros(...)
+    zeros(shape, dtype=float, order='C')
+    
+    Return a new array of given shape and type, filled with zeros.
+    
+    Parameters
+    ----------
+    shape : int or tuple of ints
+        Shape of the new array, e.g., ``(2, 3)`` or ``2``.
+    dtype : data-type, optional
+        The desired data-type for the array, e.g., `numpy.int8`.  Default is
+        `numpy.float64`.
+    order : {'C', 'F'}, optional, default: 'C'
+        Whether to store multi-dimensional data in row-major
+        (C-style) or column-major (Fortran-style) order in
+        memory.
+    
+    Returns
+    -------
+    out : ndarray
+        Array of zeros with the given shape, dtype, and order.
+</code></pre>
+<p>The help function above spits out a lot of text, but the most relevant bit is at the top: The documentation shows us 1) what the function does and outputs, 2) what inputs it needs and in which order (and what data type these input should be), and 3) some examples of its use.</p>
+<p>In this section, we will be talking all about functions: how to define them, how to document them, best practices in implementing them, and more. So lets dive in!</p>
+<h2 id="defining-functions">2.1 Defining Functions</h2>
+<p>Defining functions in python is easy. The absolute simplest function I could define would look like this:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">my_function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">pass</span>
+</code></pre>
+<p>In the above example, we see that the special word <code>def</code> tells Python we are defining a function. We give it a name (<code>my_function</code> in this case) followed by parenthesis containing arguments (I have not supplied any). We end with a colon, the same way we would for a loop or conditional statement. Then, all code associated with my function gets indented (again, just like a loop or conditional statement).</p>
+<p>You’ll notice I’ve put the word <code>pass</code> into my function. This useful word is special in Python (don’t use it as a variable name) and it tells the interpreter to just keep on walkin, nothing to see here. It’s a perfect thing to add when you want to define a function (remind yourself you need it) but don’t want to add any code to it yet.</p>
+<p>But that’s boring! Let’s add some code now. A common task in Astronomical Python is to load a series of <code>fits</code> image files in a directory on our computer and stack up all the images into some storage container (like a multidimensional numpy array), as well as “extra” data from the <code>fits</code> headers like object name, exposure time, etc. Thankfully, the <code>astropy</code> library has a helpful function for reading in data.</p>
+<p>However, the <code>astropy</code> functions we’ll use are specialized for general use. But for our <em>specific</em> program, we might want to make it easy to load up a whole directory exactly how we know we want to in only a single line of code.</p>
+<p>In short, we want what’s called a <em>wrapper</em>. A function that combines several other function calls in a useful way (for us as least).</p>
+<p>I’ll start by defining the base shell of the function:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">load_directory_images</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">pass</span>
+</code></pre>
+<p>I’ve given the function a recognizable name that tells us what the function does (loads images in a directory), and I’ve specified the first <strong>argument</strong> to the function. Arguments are, much like in a mathematical function like sine, what gets fed into the function in order to facilitate the calculation. In this case, that’s a path (string) representing the location of the directory on our hard drive.</p>
+<p><strong>Important note! When we set the name “path”, this is the variable name we’ll use inside our function. It is only internal to our function, and users can supply any variable they want (of any name) to our function. Whatever is in slot number 1 of the argument list will be assigned the temporary variable “path” while it’s inside the function</strong>.</p>
+<h3 id="writing-documentation">2.1.1 Writing Documentation</h3>
+<p>When we printed out the documentation above for the <code>numpy</code> functions, there was a lot there. When writing functions for our own code, we generally do not need to be that intense — documentation depth should scale with how many people will use a given code (<code>numpy</code> is used by hundreds of thousands of users, so it needs rock solid documentation). However <em>we should always at least somewhat document our code</em>. Trust me. Ask anyone who has built research-generating code (i.e., hundreds of functions, thousands of lines of code, built over the course of 6 months to 3 years, ish) can tell you that you need documentation, so that even future-you can understand what you were trying to do.</p>
+<p>To add documentation to your function, we use triple quotes as follows:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">load_directory_images</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">'''
+    Loads a directory's worth of images into convenient storage units. 
+    Requires astropy.io.fits. 
+    '''</span>
+    <span class="token keyword">pass</span>
+</code></pre>
+<p>Now, we can see that if I run the <code>help()</code> command on my function, I get this:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token builtin">help</span><span class="token punctuation">(</span>load_directory_images<span class="token punctuation">)</span>
+</code></pre>
+<pre><code>Help on function load_directory_images in module __main__:
+
+load_directory_images(path)
+    Loads a directory's worth of images into convenient storage units. Requires astropy.io.fits.
+</code></pre>
+<p>Basically, I can now see my function’s documentation and know what it does.</p>
+<h3 id="formatting-your-documentation--best-practices">2.1.2 Formatting your Documentation + Best Practices</h3>
+<p>What I did above technically counts as documentation. But there are a few extra things we really need to make it useful. Let’s improve our documentation:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">load_directory_images</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">'''
+    Loads a directory's worth of images into convenient storage units. 
+    Requires astropy.io.fits.
+    Note: All Images in directory must be of same shape. 
+    
+    Parameters
+    ----------
+    path: str
+        path to the directory you wish to load, as a string. 
+    
+    Returns
+    -------
+    image_stack: array_like
+        A stack of all images contained in the directory. 
+        Array of shape (N,X,Y) where N is the number of images,
+        and X,Y are the dimensions of each image. 
+    image_dict: dict
+        A dictionary containing headers for each image, the keys 
+        are the same as the indices of the corresponding
+        image in the image_stack
+    '''</span>
+    <span class="token keyword">pass</span>
+</code></pre>
+<p>Cool, now our function is much better defined. We know what needs to be input, what data types they need to be, and even have a word of warning (only works on directories where the fits images are the same dimension). I realized this would be true when writing the documentation for <code>image_stack</code>, so writing documentation at least to this level up front can sometimes help clarify what you are trying to <em>do</em> with a function in the first place and catch potential pitfalls (we’ll want to catch that size issue within the actual code too).</p>
+<p>You may have noticed that I have a very regular system for showing the parameters and return values, i.e., <code>name : dtype</code> followed by an indented line with the description. You need not do exactly this when you’re first starting, and can do <em>anything</em> within the triple quotes in terms of formatting. <em>However</em>, as we move into higher level programming, you may write code that you have to host on Github and which needs an actual documentation website like a <code>ReadtheDocs.io</code>. You may have used such a site for research code you’ve downloaded and used. These sites are built using automatic frameworks, e.g., <code>Sphinx</code>, which scrape your entire codebase and build the site for you automatically. Super convenient! But, these tools require your documentation be formatted a certain way. So, it’s never too early to get into the habit of writing documentation recognizable by these tools.</p>
+<h3 id="how-detailed-is-too-detailed">2.1.3 How detailed is too detailed?</h3>
+<p>Sometimes we’re just doing some quick exploratory data analysis (EDA) and are writing a quick function to extract and plot some quick data. Writing good documentation takes time, and there’s a tradeoff in efficiency if you stop to write good documentation for every function.</p>
+<p>Personally, I have two lines in the sand that I use to determine the type of documentation to write. For EDA and other quick script type things (essentially, playing around, and things that won’t end up in the actual paper), I don’t bother with documentation or I write a quick one-liner. For my own research code, which will produce outputs I publish in a paper, I write documentation that is at minimum a detailed description, and if I plan to publish my code along with the paper, then I use full documentation as shown above. If you are writing code to be used by others, then it is <em>absolutely essential</em> to write full scale, formatted documentation.</p>
+<h2 id="back-to-our-function-checking-the-input">2.2 Back to Our Function: Checking the Input</h2>
+<p>Often, a useful first step in writing a function is confirming that the inputs adhere to the data types, dimensions, or other rules we’ve established in our documentation. Why? Because if inputs do not meet these standards, our function may not operate as intended. A common saying in the industry is “garbage in, garbage out”. Often, we trust that a user (or us) entering bad data (or wrongly shaped, or typed, data) into our function will cause a <em>catastrophic</em> failure which causes the code to stop and throw an error. For example, having two images of different dimensions in our directory will throw an error when we tell numpy to stack those arrays.</p>
+<p>But what is even more insidious, and harder to track down, than the above, is when our code inside our function <em>runs without error</em>, despite the input being incorrect. If this happens, the function may output garbage that gets fed into other functions, and tracking down the bug may become hard.</p>
+<p>As usual, input checking is a trade off between time spent writing it and further progress, and once again, I usually implement such steps at the “production code” or “this is going in the paper” stage.</p>
+<p>Our only input to our sample function here is a string path to a location, so there are two things we can check: first, that it is a string, and second, that the location exists on the computer of reference. Both of these would end up flagging errors later (when we tried to use <code>astropy</code>'s loading function using <code>path</code>, but let’s for completeness do it ourselves:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">import</span> os
+<span class="token keyword">def</span> <span class="token function">load_directory_images</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">'''
+    Loads a directory's worth of images into convenient 
+    storage units. Requires astropy.io.fits.
+    Note: All Images in directory must be of same shape. 
+    
+    Parameters
+    ----------
+    path: str
+        path to the directory you wish to load, as a string. 
+    
+    Returns
+    -------
+    image_stack: array_like
+        A stack of all images contained in the directory. 
+        Array of shape (N,X,Y) where N is the number of images,
+        and X,Y are the dimensions of each image. 
+    image_dict: dict
+        A dictionary containing headers for each image, the keys 
+        are the same as the indices of the corresponding
+        image in the image_stack
+    '''</span>
+    <span class="token keyword">if</span> <span class="token operator">not</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">raise</span> AssertionError<span class="token punctuation">(</span><span class="token string">'Path must be a string.'</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>isdir<span class="token punctuation">(</span>path<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token boolean">False</span><span class="token punctuation">:</span>
+        <span class="token keyword">raise</span> OSError<span class="token punctuation">(</span><span class="token string">'Path does not point to a valid location.'</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span>
+</code></pre>
+<p>My two checks have now been implemented. First, we check that <code>path</code> is an instance of type string — if it isn’t, we raise an error. I’ll talk more about defining errors, raising them, etc., later, but <code>AssertionError</code> and <code>OSError</code> are two that are built into python which mean “I am asserting a variable be a certain way and it isn’t” and “You’ve messed up on something related to input and output locations on your computer”. The difference is superficial, it just further informs the user (or us) of what <em>type</em> of error occured in our code, which our error message we’ve added also does.</p>
+<p>You’ll also notice I’ve changed the <code>pass</code> into a <code>return</code>. Returning is what we do at the end of a “finished” function, where we take values calculated in the function and “return” them to the overall code (more on this in a sec).</p>
+<p>Let’s test my input-checking:</p>
+<pre class=" language-python"><code class="prism  language-python">custom_path <span class="token operator">=</span> <span class="token number">2</span>
+load_directory_images<span class="token punctuation">(</span>custom_path<span class="token punctuation">)</span>
+</code></pre>
+<pre><code>---------------------------------------------------------------------------
+
+AssertionError                            Traceback (most recent call last)
+
+&lt;ipython-input-27-0d9b0ed7f57c&gt; in &lt;module&gt;
+      1 custom_path = 2
+----&gt; 2 load_directory_images(custom_path)
+
+
+&lt;ipython-input-26-f6f134fb9056&gt; in load_directory_images(path)
+     20     '''
+     21     if not isinstance(path, str):
+---&gt; 22         raise AssertionError('Path must be a string.')
+     23     if os.path.isdir(path) == False:
+     24         raise OSError('Path does not point to a valid location.')
+
+
+AssertionError: Path must be a string.
+</code></pre>
+<p>Great! We’ve shown that my <code>AssertionError</code> correctly triggered when <code>custom_path</code> was not given as a string.</p>
+<pre class=" language-python"><code class="prism  language-python">custom_path <span class="token operator">=</span> <span class="token string">'~/FolderThatDoesntExist/other_folder/'</span>
+load_directory_images<span class="token punctuation">(</span>custom_path<span class="token punctuation">)</span>
+</code></pre>
+<pre><code>---------------------------------------------------------------------------
+
+OSError                                   Traceback (most recent call last)
+
+&lt;ipython-input-28-9f0c7a13997b&gt; in &lt;module&gt;
+      1 custom_path = '~/FolderThatDoesntExist/other_folder/'
+----&gt; 2 load_directory_images(custom_path)
+
+
+&lt;ipython-input-26-f6f134fb9056&gt; in load_directory_images(path)
+     22         raise AssertionError('Path must be a string.')
+     23     if os.path.isdir(path) == False:
+---&gt; 24         raise OSError('Path does not point to a valid location.')
+     25     return
+
+
+OSError: Path does not point to a valid location.
+</code></pre>
+<p>Great! This time, I made up something that is indeed a string, but that isn’t a location on my computer, and my check, that <code>os.path.isdir()</code> is <code>True</code>, threw an error.</p>
+<p>As a final check, let’s put in a string that should work (a real location):</p>
+<pre class=" language-python"><code class="prism  language-python">real_path <span class="token operator">=</span> <span class="token string">'/Users/'</span>
+load_directory_images<span class="token punctuation">(</span>real_path<span class="token punctuation">)</span>
+</code></pre>
+<p>And, as expected, we see that our real path throws no errors.</p>
+<p>We’re now ready to actually write the function itself! I know that seemed like a lot of up-front effort, but notice that the number of lines isn’t that large (especially if we had a one-liner documentation), and over time, you’ll be able to add input checking quickly and efficiently. It’s also always good to remember you can add documentation and input checking after the fact (but not too long after)!</p>
+<h2 id="local-scope-and-global-scope">2.3 Local Scope and Global Scope</h2>
+<p>Before we go through the actual details of this particular example function, I want to talk about the concept of scope within our Python programs. So far, when working with scripts in which every line is a declaration or calculation or loop or conditional, everything exists within what is known as the <strong>global scope</strong> of the code. That simply means that if I were to run my script in the interpreter, all the variables (at least, their final states) would be accesible to me in the interpreter, and I can use any previously defined variable anywhere I want in my code.</p>
+<p>One caveat to this is iterators, which are created when you set up, e.g., a <code>for-loop.</code> In this case it’s even more confusing: the <em>final</em> iterator will still be around after the loop, e.g.,</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">continue</span>
+</code></pre>
+<pre class=" language-python"><code class="prism  language-python">i
+</code></pre>
+<pre><code>9
+</code></pre>
+<p>We see that I wrote a <code>for-loop</code> which did nothing but iterate over a list <code>[0,1,2,3,4,5,6,7,8,9]</code>. But later, I called the variable “i” and it was still 9, its last value from the loop.</p>
+<p>That seems a little sketchy, and it kind of is. It is part of the reason we use standard iterator variables like <code>i, j, k</code> in our loops… because they’re less likely to end up overwriting an important variable we want to use later. Of course, if I set up a new loop using <code>i</code>, it will be properly overwritten at the start of the loop.</p>
+<p>So, as I’ve described it, all our variables are all swimming together in the big pool that is global scope, and any variable can by accessed anywhere.</p>
+<p><em>That’s bad.</em></p>
+<p>Let me re-iterate. While that way of being, which we get used to in basic scripting, is extremely <em>convenient</em>, it is also dangerous, and it makes tracking down bugs (in which one variable gets set or calculated wrong and this issue propogates through the code into our final answer) <em>extremely difficult</em>.</p>
+<p>If you’ve ever tried to type an absurdly complicated expression into mathematica (or Wolfram Alpha), you’ve seen this effect. Garbage answer comes out, but the only way to figure out why is to start breaking down the terms of the expression into small pieces evaluated separately. This is exactly what we want to do with our code, and functions give us the ability to do this.</p>
+<p>Functions have what is called <strong>local scope</strong>. This means that any variable defined within a function <em>stays within that function</em>. It can’t be accessed from outside the function, it can’t be messed with or overwritten by any code outside the function, it’s completely walled off and isolated. Once we take a string and input it to our sample function here as <code>path</code>, for the purposes of the inside of the function, path is totally isolated.</p>
+<p><strong>A Huge Caveat.</strong> Local scope is not <em>two directional</em>. Anything accessible in the <em>global scope</em> is also accessible in the <em>local scope</em> of a function. It is the reverse that isn’t true. Observe:</p>
+<pre class=" language-python"><code class="prism  language-python">a <span class="token operator">=</span> <span class="token number">3</span>
+b <span class="token operator">=</span> <span class="token number">5</span>
+<span class="token keyword">def</span> <span class="token function">func</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span>d<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> a<span class="token operator">+</span>b<span class="token operator">+</span>c<span class="token operator">+</span>d
+
+func<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>11
+</code></pre>
+<p><strong>Welp.</strong> My function only takes 2 arguments, <code>c</code> and <code>d</code>. But inside the function, I <em>wantonly disregard local scope</em> and utilize <code>a</code> and <code>b</code> as well. As suggested by the name, global scope is truly global, even in functions.</p>
+<p>This seems to defy our desire to isolate small units of code (single chunks of calculations) into different, separated functions. So what’s the solution?</p>
+<p>Solution number 1: Simply never call variables inside functions that aren’t either inputs to the function or created within the function. For example:</p>
+<pre class=" language-python"><code class="prism  language-python">a<span class="token punctuation">,</span>b <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">,</span><span class="token number">5</span> 
+<span class="token keyword">def</span> <span class="token function">func</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span>b<span class="token punctuation">,</span>c<span class="token punctuation">,</span>d<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> a<span class="token operator">+</span>b<span class="token operator">+</span>c<span class="token operator">+</span>d
+
+func<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>---------------------------------------------------------------------------
+
+TypeError                                 Traceback (most recent call last)
+
+&lt;ipython-input-43-00c7caa4d412&gt; in &lt;module&gt;
+      3     return a+b+c+d
+      4 
+----&gt; 5 func(1,2)
+
+
+TypeError: func() missing 2 required positional arguments: 'c' and 'd'
+</code></pre>
+<p>By specifying that the variables we call “a” and “b” in our function are positional arguments, we have <em>overwritten</em> the global scope and told our function that the “a” and “b” it needs to use are ones supplied by the user. Now,</p>
+<pre class=" language-python"><code class="prism  language-python">func<span class="token punctuation">(</span>a<span class="token punctuation">,</span>b<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>11
+</code></pre>
+<p>returns the same value, but I knew exactly what was going on along the way.</p>
+<p>Another solution, of course, would be to have no variables in the global scope at all, that is, have <em>everything</em> isolated into functions. But this is typically impractical, most general use scripts we write will have at least <em>some</em> code hanging in the global name space. So solution number 1 is the most solid way to ensure you aren’t letting bugs “leak” into your functions.</p>
+<h2 id="but-wait-didnt-debugging-just-get-harder">2.4 But Wait, Didn’t Debugging Just Get Harder?</h2>
+<p>If you’ve spent any time writing functions, you may have run into the following issue: You write a simple, but maybe 15 line function to do some task. You run it, and there’s a bug – not an error raised, but the output is weird. But unlike in your script, you can’t just look at the intermediate variables in the calculation anymore, because they were in the function!</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">my_func</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    var <span class="token operator">=</span> <span class="token number">1</span>
+    var2 <span class="token operator">=</span> <span class="token number">3</span>
+    <span class="token keyword">return</span> var <span class="token operator">+</span> var2
+</code></pre>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">print</span><span class="token punctuation">(</span>var<span class="token punctuation">)</span>
+</code></pre>
+<pre><code>---------------------------------------------------------------------------
+
+NameError                                 Traceback (most recent call last)
+
+&lt;ipython-input-46-2ea387ab95ff&gt; in &lt;module&gt;
+----&gt; 1 print(var)
+
+
+NameError: name 'var' is not defined
+</code></pre>
+<p>When we run commands in the ipython interpreter, or jupyter notebook, or wherever, we are in the <em>global</em> namespace, so we can’t get to the variables created inside the function. This often leads to the insertion of a multitude of  <code>print</code> statements into our functions to check intermediate steps, but even this isn’t ideal; sometimes we need to <em>mess with</em> those variables, interrogate their shape, or length, or other properties.</p>
+<p>There are two ways to go with this. When you’re starting out, I recommend play testing your code <em>outside of functions</em> in the global namespace, tweaking and bugfixing until things work. Then, when you’re satisfied, copy that code into a function. Once you get more comfortable with high level programming, there are actually industry solutions, e.g., software that lets you actually “jump into” the namespace of a function and muck around. This is awesome, but not necessary when you have the time and space to just test the code going into functions in a script environment or jupyter notebook cell first.</p>
+<p>Enough jabbering! Let’s get back to our example function. As I noted earlier, <code>astropy</code> has a module that lets us load images in the <code>fits</code> format easily. If you’re interested in learning more about the ins and outs of these methods, check out the section on <code>astropy</code> as well as their own website, which has solid documentation. For now, I’ll just use their tool:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">from</span> glob <span class="token keyword">import</span> glob 
+<span class="token keyword">from</span> astropy<span class="token punctuation">.</span>io <span class="token keyword">import</span> fits 
+
+<span class="token keyword">def</span> <span class="token function">load_directory_images</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">'''
+    Loads a directory's worth of images into convenient storage units. 
+    Requires astropy.io.fits, glob.
+    Note: All Images in directory must be of same shape. 
+    
+    Parameters
+    ----------
+    path: str
+        path to the directory you wish to load, as a string. 
+    
+    Returns
+    -------
+    image_stack: array_like
+        A stack of all images contained in the directory. 
+        Array of shape (N,X,Y) where N is the number of images,
+        and X,Y are the dimensions of each image. 
+    image_dict: dict
+        A dictionary containing headers for each image, the keys 
+        are the same as the indices of the corresponding
+        image in the image_stack
+    '''</span>
+    <span class="token keyword">if</span> <span class="token operator">not</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">raise</span> AssertionError<span class="token punctuation">(</span><span class="token string">'Path must be a string.'</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>isdir<span class="token punctuation">(</span>path<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token boolean">False</span><span class="token punctuation">:</span>
+        <span class="token keyword">raise</span> OSError<span class="token punctuation">(</span><span class="token string">'Path does not point to a valid location.'</span><span class="token punctuation">)</span>
+    
+    files_in_dir <span class="token operator">=</span> glob<span class="token punctuation">(</span>path<span class="token punctuation">)</span>
+    image_stack <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    header_stack <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span>f <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>files_in_dir<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">with</span> fits<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span>f<span class="token punctuation">)</span> <span class="token keyword">as</span> HDU<span class="token punctuation">:</span>
+            image_stack<span class="token punctuation">.</span>append<span class="token punctuation">(</span>HDU<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>data<span class="token punctuation">)</span>
+            header_stack<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> HDU<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>header
+    image_stack <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>image_stack<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> image_stack<span class="token punctuation">,</span> header_stack
+</code></pre>
+<p>The exact details of the above code aren’t super important, as long as you see and understand how this is now all wrapped into the function and the two quantities of interest are output. You may notice some assumptions built into the code, such as that the image and header of the fits file are stored in the 0th extension of the HDU (don’t worry if that means nothing to you right now). For astronomical data from telescopes, this is almost always the case, but this would be an example of personal code in which we knew the format of the fits images we were trying to load and thus which extension to choose. It’s a useful aside, however, to consider that if we were writing general use code for a pipeline that would see many different fits files of different internal storage systems, we’d need more robust code for dynamically loading them this way.</p>
+<h2 id="chaining-functions-together">2.5 Chaining Functions Together</h2>
+<p>Once you start writing your code into functions, you’ll find that the output of function one tends to become the input of function two. For example, I could write a new function:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">median_image</span><span class="token punctuation">(</span>image_stack<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">'''
+    Takes a stack of images and returns the median image. 
+    Parameters
+    ----------
+    image_stack: array_like
+        stack of images, first dimension being image index. 
+    Returns
+    -------
+    median_image: array_like
+        single image of the median of the input images
+    '''</span>
+    median_image <span class="token operator">=</span> np<span class="token punctuation">.</span>median<span class="token punctuation">(</span>image_stack<span class="token punctuation">,</span>axis<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> median_image
+</code></pre>
+<p>Now, if I wanted to median the first three images in my full stack, I could feed the following</p>
+<pre class=" language-python"><code class="prism  language-python">image_stack <span class="token operator">=</span> load_directory_images<span class="token punctuation">(</span>image_path<span class="token punctuation">)</span>
+first_3 <span class="token operator">=</span> median_image<span class="token punctuation">(</span>image_stack<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">:</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+</code></pre>
+<p>I again want to emphasize that we can call our variables <em>whatever</em> outside the functions and then feed them in. Often though, the names end up being similar or the same.</p>
+<p>You might be wondering why you would write a function that had a single line of code as its calculation. The short answer is, you wouldn’t – my <code>median_image()</code> function adds so little beyond your general use of <code>np.median()</code> that it isn’t worth writing. But usually in Astronomy… we don’t just want a median. We want… say… a sigma clipped mean. Now <em>that</em> would take a few lines to accomplish, and is probably worth writing a function for.</p>
+<p>As a general guideline, I tend to put something in a function if it</p>
+<ul>
+<li>Does a single “task” or “unit” of my program</li>
+<li>Has more then ~10 lines OR</li>
+<li>Is only 3-5 lines but is used SO DANG OFTEN in my code that writing one line instead of 3 every time saves me work.</li>
+</ul>
+<h2 id="the-concept-of-main-">2.6 The Concept of Main( )</h2>
+<p>So far, we’ve discussed the way one formats functions, and how to take what’s output from a function (i.e., listed in the return statement) and save it to a new variable (see the above example), which can then be put into other functions, etc. How does this actually flow in a more major script’s workflow?</p>
+<p>One of the simplest ways is through a <code>main()</code> function. Let’s say I’ve written four functions which do the following:</p>
+<ul>
+<li>Load the images from a directory into a stack</li>
+<li>Cleaned each image somehow (maybe removing cosmic rays or bad pixels)</li>
+<li>Aligned the images (which were, say, dithered)</li>
+<li>Created “coadds” of the images by stacking them in various ways (mean, clipped mean, median, weighted mean).</li>
+</ul>
+<p>Each function assumes general input and has general output. To make it specific, I could write a function, which we often simply call <code>main()</code>, like this:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span>image_dir<span class="token punctuation">,</span>cleaning_keyword<span class="token punctuation">,</span>alignment_keyword<span class="token punctuation">,</span>coadd_keyword<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    image_stack<span class="token punctuation">,</span> header_stack <span class="token operator">=</span> load_directory_images<span class="token punctuation">(</span>image_dir<span class="token punctuation">)</span>
+    cleaned_images <span class="token operator">=</span> clean_images<span class="token punctuation">(</span>image_stack<span class="token punctuation">,</span>cleaning_keyword<span class="token punctuation">)</span>
+    aligned_images <span class="token operator">=</span> align_images<span class="token punctuation">(</span>cleaned_images<span class="token punctuation">,</span>alignment_keyword<span class="token punctuation">)</span>
+    coadded_images <span class="token operator">=</span> coadd_images<span class="token punctuation">(</span>aligned_images<span class="token punctuation">,</span>coadd_keyword<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> coadded_images
+</code></pre>
+<p>This would usually be the last function defined in our code, and we can see that we here indicate that main takes in all the info needed to run all the functions properly (more on this in a second). Assuming that all works, we could then open a terminal, run our python script, and then simply run something like <code>final_output = main(inputs)</code> function to run everything in sequence and get the final output.</p>
+<p>But wait, it gets even easier than that! At the bottom of our Python script, below the <code>main</code> and other functions, we can add the following:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    main<span class="token punctuation">(</span>image_dir<span class="token punctuation">,</span>cleaning_keyword<span class="token punctuation">,</span>alignment_keyword<span class="token punctuation">,</span>coadd_keyword<span class="token punctuation">)</span>
+</code></pre>
+<p>What is this? The above is a conditional statement that checks whether our current Python file has been run. Essentially, when I open an ipython interpreter and type <code>run myscript.py</code>, Python automatically sets a “secret variable” called <code>__name__</code> to <code>__main__</code>, because the script is being run. You can put whatever you want inside this block, which is only True if you run the script entirely. In this case I’ve chosen to put a function call to my own <code>main()</code> function inside. Now, if I open the interpreter and type</p>
+<pre class=" language-python"><code class="prism  language-python">run myscript<span class="token punctuation">.</span>py 
+</code></pre>
+<p>It will execute my <code>main()</code> call automatically, without me having to type in <code>main(blah,blah)</code> into the terminal myself.</p>
+<p>You may be wondering why you wouldn’t simply have a call of your main function at the bottom of your script, without this weird conditional. And you’re right: If you did that, the same thing would happen, and running the script would then run your main call, hence running all your functions. But something we haven’t talked about yet, but will talk about <em>in detail</em> soon, is the idea of <code>importing</code> your own functions between python files. When you begin doing this, it becomes considerably more important to have actual executions tucked away inside these conditionals that only run if our target file is run directly in the interpreter, rather than imported into another script.</p>
+<h2 id="flexible-functions-non-positional-arguments">2.7 Flexible Functions: non-positional arguments</h2>
+<p>Thus far, our discussion of the definition of functions has only included what are known as <code>positional</code> arguments. When I define a simple function like the following:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">func</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span>b<span class="token punctuation">,</span>c<span class="token punctuation">,</span>d<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>a<span class="token operator">+</span>b<span class="token operator">-</span>c<span class="token punctuation">)</span><span class="token operator">*</span>d
+</code></pre>
+<p>You can see clearly that the <em>position</em> of the four variables in the argument list matters. Whatever the first number I supply is will be deemed <code>a</code>, the second number I feed will be <code>b</code>, and so on. And this affects the output now, as an order of operations has been established (rather than a simple sum). If I flip around the order of the numbers I feed in, I’ll clearly get a different answer.</p>
+<p>There are several other forms of argument, beyond positional. The first is an <em>optional</em>, <em>default</em>, or <em>key word</em> argument (the three are used interchangeably). This is extremely useful when we want to obey the golden scope rule above about not using any variables not asked for as arguments, but we <em>do</em> know that this value often takes a single value.</p>
+<p>To give a concrete example, let’s say I want to calculate the sine of some values in my code, and <em>usually</em> the angles I’m working with are in radians (which is what <code>np.sin()</code> requires) but <em>sometimes</em> they’re in degrees. I can write a quick wrapper for my sine function as follows:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">my_sin</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span>units<span class="token operator">=</span><span class="token string">'radian'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> units<span class="token operator">==</span><span class="token string">'radian'</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> np<span class="token punctuation">.</span>sin<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    <span class="token keyword">elif</span> units <span class="token operator">==</span><span class="token string">'deg'</span><span class="token punctuation">:</span>
+        new_x <span class="token operator">=</span> x <span class="token operator">*</span> np<span class="token punctuation">.</span>pi <span class="token operator">/</span> <span class="token number">180.0</span> 
+        <span class="token keyword">return</span> np<span class="token punctuation">.</span>sin<span class="token punctuation">(</span>new_x<span class="token punctuation">)</span>
+</code></pre>
+<p>The way this works is that my function <em>assumes</em> <code>units</code> to be “radians” unless otherwise specified:</p>
+<pre class=" language-python"><code class="prism  language-python">my_sin<span class="token punctuation">(</span>np<span class="token punctuation">.</span>pi<span class="token punctuation">)</span>
+</code></pre>
+<pre><code>1.2246467991473532e-16
+</code></pre>
+<p>We see this returns 0 (to computer precision) as expected. However, if I specify different units:</p>
+<pre class=" language-python"><code class="prism  language-python">my_sin<span class="token punctuation">(</span><span class="token number">90</span><span class="token punctuation">,</span>units<span class="token operator">=</span><span class="token string">'deg'</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>1.0
+</code></pre>
+<p>The code knew to convert my degrees into radians and then return the <code>np.sin()</code> value.</p>
+<p>A cool thing about these types of arguments is that because they are linked to keywords (e.g., ‘deg’ was linked to the variable <code>units</code>), they are <em>not</em> positional. A great example of this comes from the <code>matplotlib</code> library. Plotting functions in this library tend to have a bunch of optional arguments with defaults set, but which you can change. If you use the keyword for those parameters, their order doesn’t matter:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
+x <span class="token operator">=</span> np<span class="token punctuation">.</span>arange<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
+y <span class="token operator">=</span> x<span class="token operator">**</span><span class="token number">2</span>
+
+plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">,</span>ls<span class="token operator">=</span><span class="token string">'-'</span><span class="token punctuation">,</span>color<span class="token operator">=</span><span class="token string">'red'</span><span class="token punctuation">,</span>ms<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span>label<span class="token operator">=</span><span class="token string">'points'</span><span class="token punctuation">,</span>alpha<span class="token operator">=</span><span class="token number">0.9</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>legend<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>&lt;matplotlib.legend.Legend at 0x7f9981023610&gt;
+</code></pre>
+<p><img src="output_58_1.png" alt="png"></p>
+<p>Now see what happens if I change around the order of the non positional arguments (for <code>plt.plot()</code>, the only positional arguments are x and y, so these must always be supplied as the first two arguments):</p>
+<pre class=" language-python"><code class="prism  language-python">plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">,</span>alpha<span class="token operator">=</span><span class="token number">0.9</span><span class="token punctuation">,</span>color<span class="token operator">=</span><span class="token string">'red'</span><span class="token punctuation">,</span>ms<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span>ls<span class="token operator">=</span><span class="token string">'-'</span><span class="token punctuation">,</span>label<span class="token operator">=</span><span class="token string">'points'</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>legend<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>&lt;matplotlib.legend.Legend at 0x7f9981f00ca0&gt;
+</code></pre>
+<p><img src="output_60_1.png" alt="png"></p>
+<p>We get exactly the same plot.</p>
+<p>One important note about keyword arguments is that, of course, they all must be supplied <em>after</em> the positional arguments. For example, if I ran</p>
+<pre class=" language-python"><code class="prism  language-python">plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>x<span class="token punctuation">,</span>alpha<span class="token operator">=</span><span class="token number">0.9</span><span class="token punctuation">,</span>y<span class="token punctuation">,</span>color<span class="token operator">=</span><span class="token string">'red'</span><span class="token punctuation">,</span>ms<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span>ls<span class="token operator">=</span><span class="token string">'-'</span><span class="token punctuation">,</span>label<span class="token operator">=</span><span class="token string">'points'</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>  File "&lt;ipython-input-58-1fd2328cc66e&gt;", line 1
+    plt.plot(x,alpha=0.9,y,color='red',ms=5,ls='-',label='points')
+                         ^
+SyntaxError: positional argument follows keyword argument
+</code></pre>
+<p>Python helpfully tells me that a positional argument (one not assigned to a keyword) came after a keyword argument, and this is a no-no. In short, if you define a function with three positional arguments and four keyword arguments, it might look like:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">func_args</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">,</span>z<span class="token punctuation">,</span>a<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span>b<span class="token operator">=</span><span class="token number">25</span><span class="token punctuation">,</span>c<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span>d<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> d<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> x<span class="token operator">+</span>y<span class="token operator">+</span>z
+    <span class="token keyword">elif</span> c <span class="token keyword">is</span> <span class="token operator">not</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'wow!'</span><span class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> x<span class="token operator">+</span>b
+</code></pre>
+<p>The above function is of course nonsensical, but make sure you understand the code flow that occurs (try it out yourself! Run the function while only supplying <code>x,y,z</code> values, then while messing with changing <code>d</code> from <code>False</code> to <code>True</code> or <code>c</code> to anything.</p>
+<h2 id="even-more-flexibility--args-and-kwargs">2.8 Even more flexibility!  *args and **kwargs</h2>
+<p>What if a situation arises where we want our function to accept an unlimited number of arguments? To give a simple example: What if I want to write a <code>sum()</code> function that sums up as many numbers as you put into it? Of course, we could write a function that takes a single argument as a list or array, but for the sake of this example, how would we allow the user to enter as many numbers as possible?</p>
+<p>The answer is with the beauty of <code>*args</code>. Let’s take our sum example:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">mysum</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span>b<span class="token punctuation">,</span><span class="token operator">*</span>args<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    running_sum <span class="token operator">=</span> a<span class="token operator">+</span>b
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> args<span class="token punctuation">:</span>
+        running_sum<span class="token operator">+=</span>i 
+    <span class="token keyword">return</span> running_sum
+</code></pre>
+<pre class=" language-python"><code class="prism  language-python">mysum<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>3
+</code></pre>
+<pre class=" language-python"><code class="prism  language-python">mysum<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>21
+</code></pre>
+<p>Cool, right?</p>
+<p>The concept is actually rather simple. When we add <code>*args</code> to the end of our list of arguments for our function, it tells Python to take any additional supplied arguments and store them in a list which inside our function will be known as <code>args</code>. I can then do things with that list (in the example, I iterated through them and added them to the initial sum of the positional arguments. Of course, since they’re already a list, a faster method would be:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">mysum</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span>b<span class="token punctuation">,</span><span class="token operator">*</span>args<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> a<span class="token operator">+</span>b<span class="token operator">+</span>np<span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span>
+</code></pre>
+<p>where by faster I mean both in lines of code and computationally (vector sums over an array or list are always faster than a for-loop; more on that in the chapter on optimization).</p>
+<p>But what if the extra arguments we want to accept aren’t in just any order, and we want to track that somehow? Naturally, the solution is similar, but instead we’ll use the signifier <code>**kwargs</code>. This tells our function to accept any number of additional <em>keyword arguments</em>, like the ones we’ve been discussing above. For example:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">pretty_print</span><span class="token punctuation">(</span>string<span class="token punctuation">,</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>string<span class="token punctuation">)</span>
+</code></pre>
+<p>My <code>pretty_print()</code> function now requires a string input… but is happy to accept any other kwargs I throw at it:</p>
+<pre class=" language-python"><code class="prism  language-python">pretty_print<span class="token punctuation">(</span><span class="token string">'Hello, world!'</span><span class="token punctuation">,</span>subtext<span class="token operator">=</span><span class="token string">'Ive had my morning coffe'</span><span class="token punctuation">,</span>energy_level<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>Hello, world!
+</code></pre>
+<p>What happened to those extra keyword arguments? Like the example for <code>*args</code>, they got stored, but this time into a dictionary of name <code>kwargs</code>, and can be accessed in the function. Let’s use one:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">pretty_print</span><span class="token punctuation">(</span>string<span class="token punctuation">,</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>string<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token string">'sep'</span> <span class="token keyword">in</span> kwargs<span class="token punctuation">.</span>keys<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>kwargs<span class="token punctuation">[</span><span class="token string">'sep'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+</code></pre>
+<pre class=" language-python"><code class="prism  language-python">pretty_print<span class="token punctuation">(</span><span class="token string">'Hello, World!'</span><span class="token punctuation">,</span>sep<span class="token operator">=</span><span class="token string">'----------------'</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>Hello, World!
+----------------
+</code></pre>
+<p>Our function is still agnostic to any extra keywords supplied. <em>But</em>, IF one of those keyword args happens to be <code>sep</code>, my function does something special: it yanks the value of that key from the internal dictionary of kwargs and in this case prints it.</p>
+<p>The above examples provide a base level of use… but may not seem that exciting. Why not just make <code>sep</code> an optional keyword of my <code>pretty_print()</code> function?</p>
+<p>Once again, the simplicity of the example belays the true use: threading extra arguments through multiple functions. Let’s say I have a <code>main()</code> function in my script, which only take a few main parameters that set up my run. And let’s say that buried inside my <code>main()</code> function is a function call to <code>pretty_print()</code> which tells me my code finished, say, aligning the images. That would look like this:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span>image_dir<span class="token punctuation">,</span>cleaning_keyword<span class="token punctuation">,</span>alignment_keyword<span class="token punctuation">,</span>coadd_keyword<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    image_stack<span class="token punctuation">,</span> header_stack <span class="token operator">=</span> load_directory_images<span class="token punctuation">(</span>image_dir<span class="token punctuation">)</span>
+    cleaned_images <span class="token operator">=</span> clean_images<span class="token punctuation">(</span>image_stack<span class="token punctuation">,</span>cleaning_keyword<span class="token punctuation">)</span>
+    aligned_images <span class="token operator">=</span> align_images<span class="token punctuation">(</span>cleaned_images<span class="token punctuation">,</span>alignment_keyword<span class="token punctuation">)</span>
+    pretty_print<span class="token punctuation">(</span><span class="token string">'Finished Aligning Images, moving on to coadds.'</span><span class="token punctuation">)</span>
+    coadded_images <span class="token operator">=</span> coadd_images<span class="token punctuation">(</span>aligned_images<span class="token punctuation">,</span>coadd_keyword<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> coadded_images
+</code></pre>
+<p>The Above is a pretty common way to track our code progress in academic code. But you may notice an issue – even if I setup a keyword argument in <code>pretty_print()</code> which takes in the separator, i.e.,</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">pretty_print</span><span class="token punctuation">(</span>string<span class="token punctuation">,</span>sep<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>string<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> sep <span class="token keyword">is</span> <span class="token operator">not</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>sep<span class="token punctuation">)</span>
+</code></pre>
+<pre class=" language-python"><code class="prism  language-python">pretty_print<span class="token punctuation">(</span><span class="token string">'hello!'</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>hello!
+</code></pre>
+<pre class=" language-python"><code class="prism  language-python">pretty_print<span class="token punctuation">(</span><span class="token string">'hello!'</span><span class="token punctuation">,</span>sep<span class="token operator">=</span><span class="token string">'------'</span><span class="token punctuation">)</span>
+</code></pre>
+<pre><code>hello!
+------
+</code></pre>
+<p>The problem is, my <code>main()</code> function doesn’t have an argument, positional or otherwise, that takes in <code>sep</code>. You can see that if every function inside <code>main()</code> has several optional arguments, and we wanted the ability to adjust them from a function call of <code>main()</code>, we’d have to add all of those arguments as optional arguments of <code>main()</code> as well. That’s both messy and a huge pain. Instead, we can do the following:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span>image_dir<span class="token punctuation">,</span>cleaning_keyword<span class="token punctuation">,</span>alignment_keyword<span class="token punctuation">,</span>coadd_keyword<span class="token punctuation">,</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    image_stack<span class="token punctuation">,</span> header_stack <span class="token operator">=</span> load_directory_images<span class="token punctuation">(</span>image_dir<span class="token punctuation">,</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+    cleaned_images <span class="token operator">=</span> clean_images<span class="token punctuation">(</span>image_stack<span class="token punctuation">,</span>cleaning_keyword<span class="token punctuation">,</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+    aligned_images <span class="token operator">=</span> align_images<span class="token punctuation">(</span>cleaned_images<span class="token punctuation">,</span>alignment_keyword<span class="token punctuation">,</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+    pretty_print<span class="token punctuation">(</span><span class="token string">'Finished Aligning Images, moving on to coadds.'</span><span class="token punctuation">,</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+    coadded_images <span class="token operator">=</span> coadd_images<span class="token punctuation">(</span>aligned_images<span class="token punctuation">,</span>coadd_keyword<span class="token punctuation">,</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> coadded_images
+</code></pre>
+<p>The above necessitates that each interior function have been defined to allow <code>**kwargs</code> to be input (the way pretty print did in line 69). But what will happen now is I can run <code>main()</code> and feed in any additional keyword arguments for <em>any</em> of the interior functions and every function will be fed the full set, but can pick out the ones relevant to it using a <code>if ___ in kwargs.keys()</code> type mechanism.</p>
+<p>You may sense a danger here, which is that multiple interior functions of yours may have some check like the one above that checks for the <em>same</em> keyword argument. That would be bad, if the input keyword arg was only meant to refer to one of the interior functions.</p>
+<p>The trick then, is to have, for example, <code>pretty_print()</code>''s check look in the kwarg dictionary for something called <code>pretty_print_sep</code> instead. At the outer layer, you would then add that if you wanted it to get to your <code>pretty_print()</code> function.</p>
+<p>One additional note on the formatting: the asterisk, “<code>*</code>” (or “<code>**</code>”) has two meanings as I’ve used them throughout codes above: “pack”, and “unpack”. When you use the “<code>**</code>” in your <em>function definition</em>, it is telling your function to take all additional keyword arguments and their values, and <em>pack</em> them into a dictionary called <code>kwargs</code> accesible within the function. However, in the last function above, I’ve done exactly that in the definition line of <code>main()</code>. Hence, some dictionary called <code>kwargs</code> was created and I could access it as follows:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span>image_dir<span class="token punctuation">,</span>cleaning_keyword<span class="token punctuation">,</span>alignment_keyword<span class="token punctuation">,</span>coadd_keyword<span class="token punctuation">,</span><span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    
+    <span class="token keyword">print</span><span class="token punctuation">(</span>kwargs<span class="token punctuation">)</span>
+    
+    image_stack<span class="token punctuation">,</span> header_stack <span class="token operator">=</span> load_directory_images<span class="token punctuation">(</span>image_dir<span class="token punctuation">)</span>
+    cleaned_images <span class="token operator">=</span> clean_images<span class="token punctuation">(</span>image_stack<span class="token punctuation">,</span>cleaning_keyword<span class="token punctuation">)</span>
+    aligned_images <span class="token operator">=</span> align_images<span class="token punctuation">(</span>cleaned_images<span class="token punctuation">,</span>alignment_keyword<span class="token punctuation">)</span>
+    pretty_print<span class="token punctuation">(</span><span class="token string">'Finished Aligning Images, moving on to coadds.'</span><span class="token punctuation">)</span>
+    coadded_images <span class="token operator">=</span> coadd_images<span class="token punctuation">(</span>aligned_images<span class="token punctuation">,</span>coadd_keyword<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> coadded_images
+</code></pre>
+<p>For clarity, I’ve shown that a regular dictionary called <code>kwargs</code> exists within <code>main()</code> due to the <code>**kwargs</code> in its definition – regardless of what I do with it.</p>
+<p>So why the “<code>**</code>” in the functions below?</p>
+<p>The second use of that symbol is <em>unpacking</em>. When you use “<code>*</code>” or “<code>**</code>” in a function <em>call</em>, rather than definition, it assumes that the following word (args or kwargs) refers to a list or dictionary, and actually <em>unpacks</em> them into separate inputs to the function, whether they be just values (like in our <code>my_sum()</code> example, or whether they be keyword arguments and their values via a <code>kwarg=value,kwarg2=value2</code> type system.</p>
+<p>This explains why I actually used the “<code>**</code>” in both the definition of <code>main()</code> (to get the extra kwargs in, and pack them into a dictionary), as well as in the calls to other previously defined functions, to unpack that dictionary back into function keyword arguments passed into the functions.</p>
+<p>The use of args and kwargs is definitely intermediate in skill progression — your codes may not need it right away. But as they grow more complex, it is good to be aware of this highly flexible way of dealing with function inputs, because at some point you’ll have a code that is better off for using it.</p>
+<h2 id="testing-function-outputs-unit-testing">2.9 Testing Function Outputs: Unit Testing</h2>
+<p>Earlier, we discussed the testing of inputs to your functions to ensure proper data types or any other restriction your function needs to produce sensible results. What about the output?</p>
+<p>When we write functions, the goal is to take a large process (like reducing a set of data from raw images to science spectra) and reduce it into small, repeatable, single-task chunks so we can evaluate that each step is performing properly and independently. During the development of such a code, and such functions, you likely test the functions outputs yourself, manually — i.e., put in some sample data, make sure the output of the function makes sense.</p>
+<p>The problem is that code lives and breathes. After inserting your code into a larger framework, you’ll find you have to go back and tweak that function, add an extra input or output, modify one part of the calculation. A more advanced, but valuable way to ensure your functions still do what you want them to is by implementing what are known as <strong>unit tests</strong>.</p>
+<p>Unit tests are extra pieces of code that throw sample problems with known outcomes at each of your production functions and ensure that the functions are operating as expected. For large scale collaborations with intense pipelines, the amount of code that exists in the unit tests may even exceed, or vastly exceed, the amount of production code actually doing the science! But it is these tests that make the scientists confident in every step of their pipeline, even as it evolves and changes over time.</p>
+<p>While that sounds daunting, implementing unit testing is less challening than it sounds. There are several frameworks that handle the unit testing for you. In this example, we’ll be using <code>pytest</code>.</p>
+<p><code>Pytest</code> is <code>pip</code> installable, and simple to use. Simply create a file that starts with <code>test_</code> or ends in <code>_test.py</code> somewhere that you can access the functions of interest (say, in the same directory as your code – later we’ll talk about how to put them in a separate tests directory). Assuming you’ve done this, inside your Python file for the test, you’ll want to import <code>pytest</code> as well as your functions. For example, If we had all the functions discussed in this chapter in one python file called <code>utility_functions.py</code>, then in the first line of my <code>test_utilities.py</code> file I’d have</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">import</span> pytest
+<span class="token keyword">from</span> utility_functions <span class="token keyword">import</span> <span class="token operator">*</span>
+</code></pre>
+<p>where here I’m simply importing all the functions we would’ve defined.</p>
+<p>Next, we want to define some tests. The basic nature of defining a test is to create a function which runs your production function with some set input and asserts that the output is some known value. For example:</p>
+<pre class=" language-python"><code class="prism  language-python"><span class="token keyword">def</span> <span class="token function">test_load_images_from_directory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    testing_path <span class="token operator">=</span> <span class="token string">'/some_path_I_never_mess_with_to_some_test_fits_files/'</span>
+    image_stack<span class="token punctuation">,</span> header_dict <span class="token operator">=</span> load_directory_images<span class="token punctuation">(</span>testing_path<span class="token punctuation">)</span>
+    <span class="token comment"># I know that there are 7 sample images in that directory, </span>
+    <span class="token comment"># of image dimensions 1200 by 2400</span>
+    <span class="token keyword">assert</span> image_stack<span class="token punctuation">.</span>shape <span class="token operator">==</span> <span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">1200</span><span class="token punctuation">,</span><span class="token number">2400</span><span class="token punctuation">)</span>
+</code></pre>
+<p>In the above example, our function goes over to some testing images I’ve saved somewhere for this purpose, and tries to load them with my function. I know things about those images – for example their dimensions, and that there are 7 of them. This means that the expected shape of the resulting image stack is (7,1200,2400). You’re already used to checking equivalencies using <code>==</code>, now we assert this equivalency.</p>
+<p>Believe it or not, that’s it! At least for setting up a simple test. Now, outside in the regular terminal, in this directory, simply type</p>
+<pre class=" language-python"><code class="prism  language-python">pytest
+</code></pre>
+<p>and the software will</p>
+<ul>
+<li>locate any files that start with <code>test_</code> or end in <code>_test.py</code> in this directory</li>
+<li>run any of the functions within</li>
+<li>report on successes (places the assert is true) or failures (places where the assertion fails).</li>
+</ul>
+<p>Now, any time we make changes to our <code>load_directory_images()</code> function, we can simply run <code>pytest</code> again to make sure we didn’t break anything. (Of course, if we change the number of outputs, we have to adjust our test to reflect that, etc.)</p>
+<p>There is a <em>lot</em> more to testing – for example, methods to test many inputs all at once, which we’ll cover later in the chapter on building packages. But feel free to start setting up some very simple tests for your research code now!</p>
+<p>You might be thinking, wouldn’t it be great if the testing code just ran automatically any time I changed my research code? Good news, friend! This is the exact purpose of tools which provide <strong>Continuous Integration (CI)</strong>. Essentially, you can set up something similar to <code>pytest</code> which actually lives in the cloud and tests your code everytime you push a new commit to Github (or your version control service of choice). While there is no need at the undergraduate level to be trying to both host your personal research code on github AND have it continuously integrated and tested, it’s always good to be aware it is an available option once your code gets complex enough to warrant it!</p>
+<h2 id="wrap-up">2.10 Wrap Up</h2>
+<p>Congrats on making it through this chapter! If variables are the atoms of code, functions are the molecules – a critical fundamental building block of larger, more complex programs. Learning how to write them, document them, and test them, is a critical step in becoming a better programmer. Here are the takeaways you should have at the end of this chapter:</p>
+<ul>
+<li>Functions isolate chunks of code in a <em>local</em> namespace which the rest of your code can’t access, making them silos.</li>
+<li>Functions take arguments: You can specify positional, keyword (optional), and even infinite (*args or **kwargs) arguments.</li>
+<li>Inside your functions, you should only use variables made within the function or supplied as arguments – no dipping into the global namespace!</li>
+<li>Inside your functions, you should always add documentation (of some kind) to establish the function’s purpose, its inputs, and its outputs</li>
+<li>It’s often worth taking a few lines to check that inputs match the requirements of the function and raise errors if they don’t.</li>
+<li>Functions return things — if you don’t include a return statement, the calculations in the function go away when called. We set new variables equal to the function called with some parameters, and place what we want the function to output in the <code>return</code> statement line</li>
+<li>Just like we check the inputs inside a function, we can check the output of a function using unit testing to make sure it is operating as intended.</li>
+</ul>
+<p>As always, the best way to get better with these concepts is practice! See the associated chapter excercises for realistic astronomy examples of functions you may want or need to write!</p>
+</div>
+</body>
+
+</html>
